@@ -1,18 +1,18 @@
-## Getting Started
+# ToDo List Using RMI 
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+U can create  your own ToDo List and have access to it as long as your connected to the same network as the server.
 
-## Folder Structure
+The server creates an object of the class `Impl_List` and bind it in the RMI Registry so  the user, who already made connection with the server, can have access to the object and modify the List
 
-The workspace contains two folders by default, where:
+### How to run it
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+Simply clone the repository and access to the `bin` directory then on your CLI write these commands (Java already installed) 
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+- start the server
+```bash
+  java server
+```
+- start the client
+```bash
+  java client
+```
