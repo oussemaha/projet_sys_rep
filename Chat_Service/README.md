@@ -1,18 +1,20 @@
-## Getting Started
+# Channel broadcast TCP socket 
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+This applications is an exemple of a broadcast service. Any message you type is sent to all the connected users.
 
-## Folder Structure
+### How to run it
 
-The workspace contains two folders by default, where:
+You shoud be sure that you have `Java` installed.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+It was built and tested using **JAVA 20** a
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+- Clone the repository
+- Make you sure that you're inside the `bin` folder on your **CLI**
+- Start the server
+```bash
+java Server
+```
+- Start the clients
+```bash
+java client
+```
