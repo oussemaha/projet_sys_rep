@@ -9,7 +9,7 @@ You shoud be sure that you have `Java` installed.
 It was built and tested using **JAVA 20** a
 
 - Clone the repository
-- Make you sure that you're inside the `bin` folder on your **CLI**
+- Make sure that you're inside the `bin` folder on your **CLI**
 - Start the server
 ```bash
 java Server
