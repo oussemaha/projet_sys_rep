@@ -6,7 +6,7 @@ you'll find two Maven projects, one for the server and one for the client
 
 ### How to run it
 
-please note that these won't work probably work on **Windows powershell** so i advise that you execute them on **CMD**.
+please note that these commands won't  probably work on **Windows powershell** so i advise that you execute them on **CMD**.
 For **Linux** everything works fine.
 
 You shoud be sure that you have `maven` installed with java.
