@@ -21,10 +21,6 @@ message ServerResponse{
       string message = 1 ;
       int32 code = 2;
 }
-message channel{
-    string user1 = 1;
-    string user2 = 2;
-}
 message connectedUser{
     string user = 1;
 }

@@ -30,13 +30,20 @@ public class client {
         int responseCode;
         System.out.println("_________________________________________________________");
         System.out.println(ANSI_GREEN+"\tWelcome to the gRPC chat service"+ANSI_GREEN+ANSI_RESET);
+        System.out.println("_________________________________________________________");
         System.out.print("First of all, pick a username, ");
         do {
             System.out.print(ANSI_RED+"it must be unique: "+ANSI_RED+ANSI_RESET);
             username = scanner.nextLine();
+            try{
             registrationM request = registrationM.newBuilder().setUsername(username).build();
             ServerResponse response = stub.registration(request);
-            responseCode = response.getCode();
+            responseCode = response.getCode();}
+            catch(Exception e){
+                System.out.println(ANSI_RED+"Server is not available"+ANSI_RED+ANSI_RESET);
+                System.exit(0);
+                return;
+            }
         } while (responseCode != 100);
         System.out.println(ANSI_YELLOW+"To use this service here are the appropriate commands\n"+ANSI_YELLOW+ANSI_RESET);
         System.out.println(ANSI_CYAN+"#To send a message type the following:                  "+ANSI_CYAN+ANSI_RESET);
@@ -59,14 +66,19 @@ public class client {
             @Override
             public void onError(Throwable t) {
                 System.out.println("Error: " + t.getMessage());
+                System.out.println(ANSI_RED +"Server encountred an error "+ANSI_RED+ANSI_RESET);
+                System.exit(0);
             }
 
             @Override
             public void onCompleted() {
-                System.out.println("Server has closed the connection");
+                System.out.println(ANSI_YELLOW+"Server has closed the connection"+ANSI_YELLOW+ANSI_RESET);
+                channel.shutdown();
+                System.exit(0);
+                
             }
         });
-        System.out.println("Successfully connected");
+        System.out.println("");
         // first message to register the stream Observer
         content message = content.newBuilder().setMessage(username).build();
         obs.onNext(message);
@@ -91,8 +103,6 @@ public class client {
 
             } else if (command_args[0].equals("server") && command_args[1].equals("exit")) {
                 obs.onCompleted();
-                channel.shutdown();
-                System.exit(0);
             } else {
                 message = content.newBuilder().setDestination(command_args[0]).setSource(username)
                         .setMessage(command_args[1]).build();

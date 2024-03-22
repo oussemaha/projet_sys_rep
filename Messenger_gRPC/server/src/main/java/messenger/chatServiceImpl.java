@@ -12,7 +12,15 @@ import io.grpc.stub.StreamObserver;
 public class chatServiceImpl extends ChatImplBase {
     List<String> clientsNameList = new ArrayList<String>();
     Map<String, StreamObserver<content>> clients = new ConcurrentHashMap<String,StreamObserver<content>>();
-
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
     chatServiceImpl() {
         super();
     }
@@ -30,7 +38,7 @@ public class chatServiceImpl extends ChatImplBase {
             ServerResponse.Builder response = ServerResponse.newBuilder();
             response.setMessage("successfully registered")
                     .setCode(100);
-            System.out.println("User " + request.getUsername() + " connected");
+            System.out.println(ANSI_GREEN+"User " + request.getUsername() + " connected"+ANSI_GREEN+ANSI_RESET);
 
             responseObserver.onNext(response.build());
             responseObserver.onCompleted();
@@ -40,38 +48,37 @@ public class chatServiceImpl extends ChatImplBase {
     @Override
     public StreamObserver<content> chat(StreamObserver<content> responseObserver){
         return new StreamObserver<content>(){
+            String userSentTo = "";
             @Override
             public void onNext(content request){
                 if(!clients.containsValue(responseObserver)){
                     clients.put(request.getMessage(),responseObserver);
+                    userSentTo = request.getMessage();
                     return;
                 }
-                clients.get(request.getDestination()).onNext(request);
+                if(clientsNameList.contains(request.getDestination())){
+                    clients.get(request.getDestination()).onNext(request);
+                    System.out.println(request.getSource() + " sent a message to " + request.getDestination() );
+                }else{
+                    System.out.println(request.getSource()+" tried to send a message to an unexistent user");
+                    content response = content.newBuilder().setMessage("User not found").setSource("Server").setDestination(request.getSource()).build();
+                    responseObserver.onNext(response);
+                }
             }
             @Override
             public void onError(Throwable t){
-                responseObserver.onNext(content.newBuilder().setMessage("Error: " + t.getMessage()).build());
-                responseObserver.onCompleted();
-                for (Map.Entry<String, StreamObserver<content>> entry : clients.entrySet()) {
-                    if (entry.getValue().equals(responseObserver)) {
-                        System.out.println("User " + entry.getKey() + " disconnected");
-                        clients.remove(entry.getKey());
-                        clientsNameList.remove(entry.getKey());
-                        break;
-                    }
-                }
+                System.out.println("Error: " + t.getMessage());
+                clients.remove(userSentTo);
+                clientsNameList.remove(userSentTo);
+                System.out.println(ANSI_YELLOW+"User " + userSentTo + " made an Error and was disconnected "+ANSI_YELLOW+ANSI_RESET);
             }
             @Override
             public void onCompleted(){
                 //DELETE THE CLIENT FROM THE LIST
-                for (Map.Entry<String, StreamObserver<content>> entry : clients.entrySet()) {
-                    responseObserver.onCompleted();
-                    if (entry.getValue().equals(responseObserver)) {
-                        clients.remove(entry.getKey());
-                        clientsNameList.remove(entry.getKey());
-                        break;
-                    }
-                }
+                responseObserver.onCompleted();
+                clients.remove(userSentTo);
+                clientsNameList.remove(userSentTo);
+                System.out.println(ANSI_YELLOW+"User " + userSentTo + " disconnected"+ANSI_YELLOW+ANSI_RESET);
             }
     };
 }
