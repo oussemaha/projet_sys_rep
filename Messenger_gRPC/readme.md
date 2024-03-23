@@ -9,12 +9,12 @@ you'll find two Maven projects, one for the server and one for the client
 please note that these commands won't  probably work on **Windows powershell** so i advise that you execute them on **CMD**.
 For **Linux** everything works fine.
 
-You shoud be sure that you have `maven` installed with java.
+You shoud be sure that you have `maven` installed with `java`.
 
 It was built and tested using **JAVA 20** and **Maven 3.9.6**
 
 - Clone the repository
-- Make you sure that you're inside the project folder either `server` or `client`
+- Make sure that you're inside the project folder either `server` or `client`
 - Start the server
 ```bash
   mvn exec:java -Dexec.mainClass=messenger.server
